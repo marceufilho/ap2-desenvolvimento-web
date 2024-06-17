@@ -1,38 +1,26 @@
 let dados;
 
-const conteudo = document.createElement('div');
-conteudo.className = 'conteudo'
-conteudo.innerHTML = 'carregando...';
-document.body.appendChild(conteudo);
-
-const handleClick = ( evento ) => {
-    const card = evento.target.closest('article'); 
-    for (const propriedade in card.dataset){
-        
-        //cookies
+const handleClick = (evento) => {
+    const card = evento.target.closest('article');
+    for (const propriedade in card.dataset) {
+        // cookies
         document.cookie = `${propriedade}=${card.dataset[propriedade]}`;
-
-        //localStorage item por item
-        //localStorage.setItem(propriedade, card.dataset[propriedade]);
-
+        // localStorage item por item
+        // localStorage.setItem(propriedade, card.dataset[propriedade]);
     }
 
+    localStorage.setItem('atleta', JSON.stringify(card.dataset));
+    window.location.href = `descricao.html?elenco=${card.dataset.elenco}&altura=${card.dataset.altura}`;
+};
 
-    localStorage.setItem('atleta', JSON.stringify(card.dataset))
-
-    window.location.href = `outra.html?elenco=${card.dataset.elenco}&altura=${card.dataset.altura}`;
-}
-
-const acha_cookie = ( chave ) => {
+const acha_cookie = (chave) => {
     const array_cookies = document.cookie.split("; ");
-    const procurado = array_cookies.find(
-        ( e ) => e.startsWith(`${chave}=`))
+    const procurado = array_cookies.find((e) => e.startsWith(`${chave}=`));
     return procurado?.split('=')[1];
-}
+};
 
-
-const montaCard = (entrada) =>{
-    const card = document.createElement('article')
+const montaCard = (entrada) => {
+    const card = document.createElement('article');
 
     card.dataset.id = entrada.id;
     card.dataset.nome = entrada.nome;
@@ -47,7 +35,6 @@ const montaCard = (entrada) =>{
 
     card.onclick = handleClick;
 
-
     card.innerHTML += `
         <div class="card">
             <div class="img-container">
@@ -57,23 +44,84 @@ const montaCard = (entrada) =>{
             <button class="saiba-mais">Saiba Mais</button>
         </div>
     `;
-    return card;
-}
 
+    console.log('Card created:', card); // Debugging log
+
+    return card;
+};
 
 const pegaDados = async (caminho) => {
     const resposta = await fetch(caminho);
-    const dados = await resposta.json()
+    const dados = await resposta.json();
     return dados;
-}
+};
 
-pegaDados("https://botafogo-atletas.mange.li/2024-1/all").then(
-    (entrada) => {
-        dados = entrada;
-        conteudo.innerHTML = '';
-        dados.forEach(
-            (atleta) => {
-                conteudo.appendChild(montaCard(atleta));
+if (sessionStorage.getItem('logado')) {
+    document.body.innerHTML += `
+        <header>
+            <h1>Atletas Botafogo 2024-1</h1>
+            <button id="logout">Sair</button>
+        </header>
+        <div>
+            <button id="masculino">Masculino</button>
+            <button id="feminino">Feminino</button>
+            <button id="elenco">Elenco Completo</button>
+            <div>
+                <input type="text" placeholder="BUSQUE POR NOME">
+            </div>
+        </div>
+    `;
+    const conteudo = document.createElement('div');
+    conteudo.className = 'conteudo'
+    document.body.appendChild(conteudo);
+    
+
+    document.getElementById('logout').onclick = () => {
+        sessionStorage.removeItem('logado');
+    };
+
+    document.getElementById('masculino').onclick = () => {
+        console.log('Botão Masculino clicado');
+        pegaDados("https://botafogo-atletas.mange.li/2024-1/masculino").then(
+            (entrada) => {
+                console.log('Dados recebidos', entrada);
+                dados = entrada;
+                conteudo.innerHTML = '';
+                dados.forEach((atleta) => {
+                    console.log('Adicionando card para', atleta);
+                    conteudo.appendChild(montaCard(atleta));
+                });
             }
-        )
-    });
+        );
+    };
+
+    document.getElementById('feminino').onclick = () => {
+        console.log('Botão Feminino clicado');
+        pegaDados("https://botafogo-atletas.mange.li/2024-1/feminino").then(
+            (entrada) => {
+                console.log('Dados recebidos', entrada);
+                dados = entrada;
+                conteudo.innerHTML = '';
+                dados.forEach((atleta) => {
+                    console.log('Adicionando card para', atleta);
+                    conteudo.appendChild(montaCard(atleta));
+                });
+            }
+        );
+    };
+
+    document.getElementById('elenco').onclick = () => {
+        console.log('Botão Feminino clicado');
+        pegaDados("https://botafogo-atletas.mange.li/2024-1/all").then(
+            (entrada) => {
+                console.log('Dados recebidos', entrada); 
+                dados = entrada;
+                conteudo.innerHTML = '';
+                dados.forEach((atleta) => {
+                    console.log('Adicionando card para', atleta); 
+                    conteudo.appendChild(montaCard(atleta));
+                });
+            }
+        );
+    };
+}

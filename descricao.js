@@ -5,19 +5,23 @@ const montaCard = (entrada) =>{
             <div class="img-container">
                 <img src="${entrada.imagem}" alt="${entrada.nome}">
             </div>
-            <p class="nome">${entrada.nome}</p>
+            <h3 class="nome">${entrada.nome}</h3>
         </div>
         <div class="descricao">
             <p class="detalhes">${entrada.detalhes}</p>
-            <p class="jogos"> Jogos pelo menor time do rio:${entrada.jogos}</p>
-            <p class="altura"> Altura:${entrada.altura}</p>
-            <p class="naturalidade"> Jogos pelo menor time do rio:${entrada.naturalidade}</p>
-            <p class="nascimento"> Jogos pelo menor time do rio:${entrada.nascimento}</p>
+            <p class="jogos"> <strong>Jogos pelo menor time do rio:</strong> ${entrada.jogos}</p>
+            <p class="altura"> <strong>Altura:</strong> ${entrada.altura}</p>
+            <p class="naturalidade"><strong>Narturalidade:</strong> ${entrada.naturalidade}</p>
+            <p class="nascimento"><strong>Nascimento:</strong> ${entrada.nascimento}</p>
         </div>
 
         <button class="voltar">Voltar</button>
     
     `;
+
+    card.querySelector('.voltar').onclick = () => {
+        window.location.href = 'jogadores.html';
+    };
 
     return card;
 }

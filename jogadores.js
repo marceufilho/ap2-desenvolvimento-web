@@ -58,17 +58,17 @@ const pegaDados = async (caminho) => {
 
 if (sessionStorage.getItem('logado')) {
     document.body.innerHTML += `
-        <header>
+         <header>
             <h1>Atletas Botafogo 2024-1</h1>
             <button id="logout">Sair</button>
         </header>
-        <div>
-            <button id="masculino">Masculino</button>
-            <button id="feminino">Feminino</button>
-            <button id="elenco">Elenco Completo</button>
-            <div>
-                <input type="text" placeholder="BUSQUE POR NOME">
+        <div class="filtros">
+            <div class="botoes">
+                <button id="masculino">Masculino</button>
+                <button id="feminino">Feminino</button>
+                <button id="elenco">Elenco Completo</button>
             </div>
+            <input id="busca-nome" type="text" placeholder="BUSQUE POR NOME">
         </div>
     `;
     const conteudo = document.createElement('div');
@@ -124,4 +124,23 @@ if (sessionStorage.getItem('logado')) {
             }
         );
     };
+    
+    document.getElementById('busca-nome').onkeyup = (ev) =>{
+        const filtrado = dados.filter(
+            (elemento) => {
+                const estaNoNome = elemento.nome.toLowerCase().includes(ev.target.value.toLowerCase());
+                const estaNaPosicao = elemento.posicao.toLowerCase().includes(ev.target.value.toLowerCase());
+                return estaNoNome || estaNaPosicao;
+            }
+        )
+    
+        conteudo.innerHTML = '';
+    
+        filtrado.forEach(
+            (atleta) => {
+                conteudo.appendChild(montaCard(atleta));
+            }
+        )
+    };
+    
 }

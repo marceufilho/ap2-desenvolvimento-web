@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -14,6 +14,7 @@ header {
     padding: 16px;
     text-align: center;
     color: white;
+    position: relative;
 }
 
 header h1 {
@@ -39,8 +40,14 @@ header button#logout:hover {
 
 .filtros {
     display: flex;
-    gap: 16px;
+    flex-direction: column;
+    align-items: center;
     margin: 16px 0;
+}
+
+.filtros .botoes {
+    display: flex;
+    gap: 16px;
 }
 
 .filtros button {
@@ -64,6 +71,18 @@ header button#logout:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: center;
+    margin-top: 16px;
+}
+
+.conteudo {
+    display: grid;
+    gap: 16px;
+    justify-content: center;
+    max-width: 1200px;
+    padding: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    grid-template-columns: 1fr;
 }
 
 .card {
